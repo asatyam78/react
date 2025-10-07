@@ -1,10 +1,4 @@
-const initialGameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
-
-export default function GameBoard({ onSelectSquare, turns }) {
+export default function GameBoard({ onSelectSquare, board }) {
   // Handling this in App.jsx as both GameBoard and Log needs this and we should avoid intersecting states.
 
   // const [gameBoard, setGameBoard] = useState(initialGameBoard);
@@ -21,18 +15,9 @@ export default function GameBoard({ onSelectSquare, turns }) {
   //   onSelectSquare();
   // }
 
-  // Deriving state from props
-  let gameBoard = initialGameBoard;
-  for (const turn of turns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-
-    gameBoard[row][col] = player;
-  }
-
   return (
     <ol id="game-board">
-      {gameBoard.map((row, rowIndex) => (
+      {board.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
             {row.map((playerSymbol, colIndex) => (
