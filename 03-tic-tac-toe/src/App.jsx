@@ -31,7 +31,7 @@ function App() {
   const activePlayer = derivedActivePlayer(gameTurns);
 
   // Deriving state from props
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard.map(array => [...array])]; // Deep copy to handle restart
   for (const turn of gameTurns) {
     const { square, player } = turn;
     const { row, col } = square;
