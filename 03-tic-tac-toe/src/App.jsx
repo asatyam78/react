@@ -23,6 +23,11 @@ function derivedActivePlayer(gameTurns) {
 }
 
 function App() {
+  const [players, setPlayers] = useState({
+    X: "Player 1",
+    O: "Player 2",
+  });
+
   // This state is removed as this can be derived.
   // const [activePlayer, setActivePlayer] = useState("X");
   // This is going to have similar data to what we have in gameBoard. Avoid intersecting states.
@@ -31,7 +36,7 @@ function App() {
   const activePlayer = derivedActivePlayer(gameTurns);
 
   // Deriving state from props
-  let gameBoard = [...initialGameBoard.map(array => [...array])]; // Deep copy to handle restart
+  let gameBoard = [...initialGameBoard.map((array) => [...array])]; // Deep copy to handle restart
   for (const turn of gameTurns) {
     const { square, player } = turn;
     const { row, col } = square;
@@ -54,7 +59,7 @@ function App() {
       firstSquareSymbol === secondSquareSymbol &&
       firstSquareSymbol === thirdSquareSymbol
     ) {
-      winner = firstSquareSymbol;
+      winner = players[firstSquareSymbol];
     }
   }
 
@@ -80,12 +85,21 @@ function App() {
     setGameTurns([]);
   }
 
+  function handlePlayerNameChange(symbol, newName) {
+    setPlayers((prevPlayers) => {
+      return {
+        ...prevPlayers, //keeping prev data
+        [symbol]: newName, //overwriting the changed name
+      };
+    });
+  }
+
   return (
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
-          <Player name="Player 1" symbol="X" isActive={activePlayer === "X"} />
-          <Player name="Player 2" symbol="O" isActive={activePlayer === "O"} />
+          <Player name="Player 1" symbol="X" isActive={activePlayer === "X"} onChangeName={handlePlayerNameChange} />
+          <Player name="Player 2" symbol="O" isActive={activePlayer === "O"} onChangeName={handlePlayerNameChange} />
         </ol>
         {(winner || hasDraw) && (
           <GameOver winner={winner} onRestart={handleRestart} />
